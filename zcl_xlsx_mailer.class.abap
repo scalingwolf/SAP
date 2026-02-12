@@ -9,7 +9,8 @@ CLASS zcl_xlsx_mailer DEFINITION
     METHODS add_sheet
       IMPORTING
         iv_title TYPE string
-        it_table TYPE ANY TABLE.
+        it_table TYPE ANY TABLE
+        it_custom_headers TYPE tt_string OPTIONAL.
 
     METHODS build_xlsx
       RETURNING VALUE(rv_xlsx) TYPE xstring.
@@ -145,6 +146,7 @@ CLASS ZCL_XLSX_MAILER IMPLEMENTATION.
 * +-------------------------------------------------------------------------------------------------+
 * | [--->] IV_TITLE                       TYPE        STRING
 * | [--->] IT_TABLE                       TYPE        ANY TABLE
+* | [--->] IT_CUSTOM_HEADERS              TYPE        TT_STRING(Optional)
 * +--------------------------------------------------------------------------------------</SIGNATURE>
   METHOD add_sheet.
     DATA ls_sheet TYPE ty_sheet.
@@ -168,6 +170,13 @@ CLASS ZCL_XLSX_MAILER IMPLEMENTATION.
 
     IF ls_sheet-headers IS INITIAL.
       zcx_xlsx_mailer=>raise_msg( 'No columns detected (ITAB line type must be STRUCTURE)' ).
+    ENDIF.
+
+    IF it_custom_headers IS NOT INITIAL.
+      IF lines( it_custom_headers ) <> lines( ls_sheet-headers ).
+        zcx_xlsx_mailer=>raise_msg( 'Custom header count does not match table column count' ).
+      ENDIF.
+      ls_sheet-headers = it_custom_headers.
     ENDIF.
 
     APPEND ls_sheet TO mt_sheets.
