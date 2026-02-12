@@ -410,6 +410,8 @@ ENDMETHOD.
     CLEAR lv_c.
     WRITE iv_i TO lv_c.
     CONDENSE lv_c NO-GAPS.
+    REPLACE ALL OCCURRENCES OF '.' IN lv_c WITH ''.
+    REPLACE ALL OCCURRENCES OF ',' IN lv_c WITH ''.
     rv_s = lv_c.
   ENDMETHOD.
 
@@ -568,9 +570,21 @@ ENDMETHOD.
             CONTINUE.
           ENDIF.
 
-          IF cel-style > 0.
+          DATA lv_style_i TYPE i.
+          DATA lv_style_s TYPE string.
+
+          lv_style_i = cel-style.
+
+          IF cel-kind = 'D'.
+            lv_style_i = 2. "force date format
+          ELSEIF cel-kind = 'M'.
+            lv_style_i = 4. "force time format
+          ENDIF.
+
+          IF lv_style_i > 0.
+            lv_style_s = i_to_s( lv_style_i ).
             lv = lv &&
-              '<c r="' && ref && '" s="' && i_to_s( cel-style ) &&
+              '<c r="' && ref && '" s="' && lv_style_s &&
               '"><v>' && lv_num && '</v></c>'.
           ELSE.
             lv = lv &&
