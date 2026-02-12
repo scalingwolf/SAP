@@ -1,0 +1,6 @@
+METHOD raise_msg.
+  DATA lx TYPE REF TO zcx_xlsx_mailer.
+  CREATE OBJECT lx.
+  lx->mv_msg = iv_msg.
+  RAISE EXCEPTION lx.
+ENDMETHOD.
