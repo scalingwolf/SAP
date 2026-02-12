@@ -4,6 +4,8 @@ CLASS zcl_xlsx_mailer DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    TYPES tt_string TYPE STANDARD TABLE OF string WITH DEFAULT KEY.
+
     METHODS constructor.
 
     METHODS add_sheet
@@ -29,7 +31,6 @@ CLASS zcl_xlsx_mailer DEFINITION
     TYPES ty_c20  TYPE c LENGTH 20.
     TYPES ty_c80  TYPE c LENGTH 80.
     TYPES ty_c200 TYPE c LENGTH 200.
-    TYPES tt_string TYPE STANDARD TABLE OF string WITH DEFAULT KEY.
 
     "===================== normalized workbook model ===================
     TYPES: BEGIN OF ty_cell,
